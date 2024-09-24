@@ -1,0 +1,36 @@
+<div class="login-container">
+  <!-- Logo Section -->
+  <div class="logo">
+    <img src="/logo-login.png" alt="Logo" />
+  </div>
+
+  <!-- Login Form Section -->
+  <div class="login-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Enter your username</mat-label>
+      <mat-icon matPrefix>person</mat-icon>
+      <input matInput placeholder="username" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Enter your password</mat-label>
+      <mat-icon matPrefix>lock</mat-icon>
+      <input matInput [type]="hide() ? 'password' : 'text'" />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="clickEvent($event)"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide()"
+      >
+        <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <!-- Login Button -->
+    <button mat-flat-button class="login-button">LOGIN</button>
+
+    <!-- Create Account Link -->
+    <a class="create-account" href="/register">buat akun</a>
+  </div>
+</div>

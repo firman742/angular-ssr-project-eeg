@@ -1,11 +1,29 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr';
 import express from 'express';
+import mysql from 'mysql2';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 
-// The Express app is exported so that it can be used by serverless Functions.
+// Buat koneksi ke database MySQL
+const db = mysql.createConnection({
+  host: 'localhost', // Ganti dengan host database Anda
+  user: 'root', // Ganti dengan username database Anda
+  password: '', // Ganti dengan password database Anda
+  database: 'eeg_data', // Ganti dengan nama database Anda
+});
+
+// Coba koneksi ke database
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+    return;
+  }
+  console.log('Connected to the MySQL database.');
+});
+
+// Fungsi untuk membuat aplikasi Express
 export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -17,15 +35,25 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
+  // Endpoint API untuk mengambil data dari database
+  server.get('/api/data', (req, res) => {
+    const query = 'SELECT * FROM siswa'; // Ganti dengan nama tabel Anda
+
+    db.query(query, (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: 'Error fetching data' });
+      }
+      return res.json(results);
+    });
+  });
+
   // Serve static files from /browser
   server.get('**', express.static(browserDistFolder, {
     maxAge: '1y',
     index: 'index.html',
   }));
 
-  // All regular routes use the Angular engine
+  // Semua route reguler menggunakan Angular engine
   server.get('**', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
@@ -44,6 +72,7 @@ export function app(): express.Express {
   return server;
 }
 
+// Fungsi untuk menjalankan server
 function run(): void {
   const port = process.env['PORT'] || 4000;
 

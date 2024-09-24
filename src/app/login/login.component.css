@@ -1,0 +1,50 @@
+/* Container to center everything vertically and horizontally */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f9f9f9; /* Light background color */
+}
+
+/* Logo styling */
+.logo img {
+  width: 100px; /* Adjust the size of the logo */
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+/* Login form container */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+/* Full width form fields */
+.full-width {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Login button styling */
+.login-button {
+  background-color: #1e88e5; /* Blue button color */
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+/* Create account link styling */
+.create-account {
+  text-align: center;
+  color: #1e88e5;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.create-account:hover {
+  text-decoration: underline;
+}
