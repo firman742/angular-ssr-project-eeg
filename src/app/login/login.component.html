@@ -6,16 +6,23 @@
 
   <!-- Login Form Section -->
   <div class="login-form">
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field class="full-width">
       <mat-label>Enter your username</mat-label>
       <mat-icon matPrefix>person</mat-icon>
-      <input matInput placeholder="username" />
+      <input matInput [(ngModel)]="username" [ngModelOptions]="{standalone: true}" required placeholder="username" />
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field class="full-width">
       <mat-label>Enter your password</mat-label>
       <mat-icon matPrefix>lock</mat-icon>
-      <input matInput [type]="hide() ? 'password' : 'text'" />
+      <input
+        matInput
+        [type]="hide() ? 'password' : 'text'"
+        [(ngModel)]="password"
+        [ngModelOptions]="{standalone: true}"
+        required
+        placeholder="password"
+      />
       <button
         mat-icon-button
         matSuffix
@@ -23,14 +30,14 @@
         [attr.aria-label]="'Hide password'"
         [attr.aria-pressed]="hide()"
       >
-        <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
     </mat-form-field>
 
     <!-- Login Button -->
-    <button mat-flat-button class="login-button">LOGIN</button>
+    <button mat-flat-button color="primary" class="login-button" (click)="onSubmit()">LOGIN</button>
 
     <!-- Create Account Link -->
-    <a class="create-account" href="/register">buat akun</a>
+    <a class="create-account" href="/register">Buat Akun</a>
   </div>
 </div>

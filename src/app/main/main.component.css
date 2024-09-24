@@ -1,3 +1,5 @@
+
+
 .main {
   padding: 20px;
   display: flex;
@@ -7,6 +9,11 @@
 
 .button-container {
   margin-bottom: 20px;
+}
+
+.button-container button {
+  background-color: #BA1A1A;
+  color: aliceblue;
 }
 .list-item-container {
   display: flex;

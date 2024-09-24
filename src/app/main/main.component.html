@@ -3,17 +3,19 @@
   <form class="example-form">
     <mat-form-field class="example-full-width">
       <mat-label>Nama Siswa</mat-label>
-      <input matInput [(ngModel)]="namaSiswa" [ngModelOptions]="{standalone: true}" placeholder="Masukkan nama siswa" required>
+      <input matInput [(ngModel)]="namaSiswa" [ngModelOptions]="{standalone: true}" placeholder="Masukkan nama siswa"
+        required>
     </mat-form-field>
 
     <mat-form-field class="example-full-width">
       <mat-label>Nama Guru</mat-label>
-      <input matInput [(ngModel)]="namaGuru" [ngModelOptions]="{standalone: true}" placeholder="Masukkan nama guru" required>
+      <input matInput [(ngModel)]="namaGuru" [ngModelOptions]="{standalone: true}" placeholder="Masukkan nama guru"
+        required>
     </mat-form-field>
   </form>
 
-  <div class="button-container">
-    <button mat-flat-button color="primary" (click)="connect()" [disabled]="!namaSiswa || !namaGuru">Connect</button>
+  <div matTooltip="Nama Siswa Dan Guru Wajib Diisi!" [matTooltipDisabled]="!isDisabled()" class="button-container">
+    <button mat-flat-button (click)="connect()" [disabled]="!namaSiswa || !namaGuru"> Connect </button>
   </div>
 
   <mat-card appearance="outlined" style="width: 1000px">

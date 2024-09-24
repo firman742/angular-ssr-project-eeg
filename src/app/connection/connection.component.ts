@@ -9,7 +9,7 @@ import { AgCharts } from 'ag-charts-angular';
 import { AgCartesianChartOptions } from 'ag-charts-community';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component'; // Import dialog component
 import { formatDate } from '@angular/common'; // Import formatDate function
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-connection',
@@ -42,7 +42,7 @@ export class ConnectionComponent implements OnInit {
   isConnected: boolean = false;
   beforeFinished: boolean = false;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, public dialog: MatDialog) { // Inject MatDialog
+  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router, public dialog: MatDialog) { // Inject MatDialog
     this.museClient = new MuseClient();
     this.chartOptions = {
       data: [],
@@ -68,7 +68,7 @@ export class ConnectionComponent implements OnInit {
       this.namaSiswa = params['namaSiswa'] || '';
       this.namaGuru = params['namaGuru'] || '';
     });
-   }
+  }
 
   async connectMuse(): Promise<void> {
     try {
@@ -168,7 +168,7 @@ export class ConnectionComponent implements OnInit {
         console.log('Data classification started...');
         // Simulate the classification process and redirect to result page
         setTimeout(() => {
-          window.location.href = '/result';
+          this.router.navigate(['/result']);
         }, 2000); // Simulate 2-second classification delay
       } else {
         console.log('User canceled the finish operation.');

@@ -1,0 +1,19 @@
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+}
+
+mat-card {
+  margin-bottom: 20px; /* Spacing between cards */
+}
+
+/* Optionally, you can set specific styles for the cards if needed */
+.eeg-wave-graph {
+  height: 300px; /* Set a height for the graph container */
+}

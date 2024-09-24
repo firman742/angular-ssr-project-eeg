@@ -6,7 +6,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {FormsModule} from '@angular/forms';
+import { MatTooltip } from '@angular/material/tooltip';
+
+import { FormsModule } from '@angular/forms';
 
 import { CommonModule } from '@angular/common'; // Import CommonModule
 import { Router } from '@angular/router';
@@ -19,7 +21,7 @@ interface Item {
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatCardModule, MatListModule, MatDividerModule, MatIconModule],
+  imports: [CommonModule, MatTooltip, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatCardModule, MatListModule, MatDividerModule, MatIconModule],
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css'],
 })
@@ -33,7 +35,7 @@ export class MainComponent {
   namaSiswa: string = '';
   namaGuru: string = '';
 
-  constructor(private router: Router) {} // Inject Router
+  constructor(private router: Router) { } // Inject Router
 
   deleteItem(index: number) {
     this.items.splice(index, 1);
@@ -45,8 +47,8 @@ export class MainComponent {
 
   // Method untuk mengirim data ke halaman connection
   connect() {
-     // Validasi apakah kedua input telah diisi
-     if (this.namaSiswa && this.namaGuru) {
+    // Validasi apakah kedua input telah diisi
+    if (this.namaSiswa && this.namaGuru) {
       this.router.navigate(['/connection'], {
         queryParams: {
           namaSiswa: this.namaSiswa,
@@ -57,5 +59,9 @@ export class MainComponent {
       // Tampilkan pesan error jika belum diisi
       console.log("Nama siswa atau guru wajib diisi");
     }
+  }
+
+  isDisabled(): boolean {
+    return !this.namaSiswa || !this.namaGuru;
   }
 }
