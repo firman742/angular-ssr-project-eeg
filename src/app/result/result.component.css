@@ -13,7 +13,22 @@ mat-card {
   margin-bottom: 20px; /* Spacing between cards */
 }
 
-/* Optionally, you can set specific styles for the cards if needed */
+/* Set height for the chart container */
 .eeg-wave-graph {
-  height: 300px; /* Set a height for the graph container */
+  height: auto; /* Let the height adjust automatically */
+}
+
+.chart-container {
+  display: flex;
+  justify-content: center; /* Center chart horizontally */
+  width: 100%;
+}
+
+ag-charts {
+  width: 100%;
+  max-width: 800px; /* Set max-width to ensure it doesn't stretch too wide */
+}
+
+.metode-klasifikasi {
+  font-weight: bold;
 }

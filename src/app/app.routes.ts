@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: '', component: CoverComponent }, // Halaman Cover
   { path: 'app', component: AppComponent }, // Halaman App
   { path: 'main', component: MainComponent, canActivate: [AuthGuard] }, // Halaman Utama
-  { path: 'connection', component: ConnectionComponent, canActivate: [AuthGuard]}, // Halaman koneksi
+  { path: 'connection', component: ConnectionComponent, canActivate: [AuthGuard] }, // Halaman koneksi
   { path: 'result', component: ResultComponent, canActivate: [AuthGuard] }, // Halaman Hasil
   { path: 'login', component: LoginComponent }, // Halaman Login
   { path: '**', redirectTo: '/login' }, // Redirect any unknown paths to login

@@ -1,5 +1,5 @@
 <div class="main">
-  <h1>Petaotak.com</h1>
+  <h1>Siap Belajar</h1>
   <form class="example-form">
     <mat-form-field class="example-full-width">
       <mat-label>Nama Siswa</mat-label>
@@ -17,30 +17,4 @@
   <div matTooltip="Nama Siswa Dan Guru Wajib Diisi!" [matTooltipDisabled]="!isDisabled()" class="button-container">
     <button mat-flat-button (click)="connect()" [disabled]="!namaSiswa || !namaGuru"> Connect </button>
   </div>
-
-  <mat-card appearance="outlined" style="width: 1000px">
-    <mat-card-header>
-      <h4>Riwayat:</h4>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-list>
-        <mat-list-item *ngFor="let item of items; let i = index">
-          <div class="list-item-container">
-            <div class="left">
-              <div>{{ item.name }}</div>
-              <div class="time">{{ item.time }}</div>
-            </div>
-            <div class="right">
-              <button mat-icon-button (click)="viewDetails(item)">
-                <mat-icon>visibility</mat-icon>
-              </button>
-              <button mat-icon-button (click)="deleteItem(i)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </div>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
 </div>

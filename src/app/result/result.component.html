@@ -8,14 +8,11 @@
     </mat-card-header>
     <mat-card-content>
       <ul>
-        <li><strong>Kode Test:</strong> {{ eegData?.kode_test }}</li>
-        <li><strong>Tanggal:</strong> {{ eegData?.tanggal_tes }}</li>
-        <li><strong>Jam:</strong> {{ eegData?.jam }}</li>
-        <li><strong>Guru:</strong> {{ eegData?.guru }}</li>
-        <li><strong>NIS:</strong> {{ eegData?.nis }}</li>
-        <li><strong>Nama Siswa:</strong> {{ eegData?.nama }}</li>
-        <li><strong>Level:</strong> {{ eegData?.level }}</li>
-        <li><strong>Keterangan:</strong> {{ eegData?.keterangan }}</li>
+        <li><strong>Nama Siswa:</strong> {{ eegData?.nama || 'N/A' }}</li>
+        <li><strong>Guru:</strong> {{ eegData?.guru || 'N/A' }}</li>
+        <li><strong>Tanggal:</strong> {{ eegData?.waktu || 'N/A' }}</li>
+        <li><strong>Durasi:</strong> {{ eegData?.durasiPerSecond }}/s ({{ eegData?.durasi }}/ms)</li>
+        <li><strong>probability:</strong> {{ eegData?.probability || 'N/A' }}</li>
       </ul>
     </mat-card-content>
   </mat-card>
@@ -26,7 +23,9 @@
       <mat-card-title>Hasil Klasifikasi</mat-card-title>
     </mat-card-header>
     <mat-card-content>
+      <h2>{{ eegData?.classificationResult || 'Tidak ada hasil klasifikasi' }} ({{ eegData?.probability }})</h2>
       <p>{{ eegData?.deskripsi }}</p>
+      <p><span class="metode-klasifikasi">Metode Pembelajaran yang perlu diterapkan:</span> {{ eegData?.metodePembelajaran }}</p>
     </mat-card-content>
   </mat-card>
 
@@ -36,9 +35,10 @@
       <mat-card-title>Gelombang Grafik EEG</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <div id="eegGraphContainer">
-        <!-- Insert your graphing library logic here -->
-        <canvas id="eegWaveGraph"></canvas>
+      <!-- Insert your graphing library logic here -->
+      <div *ngIf="isChartReady" class="chart-container">
+        <ag-charts [options]="chartOptions">
+        </ag-charts>
       </div>
     </mat-card-content>
   </mat-card>
