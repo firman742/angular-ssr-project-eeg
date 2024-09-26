@@ -12,7 +12,11 @@
         <li><strong>Guru:</strong> {{ eegData?.guru || 'N/A' }}</li>
         <li><strong>Tanggal:</strong> {{ eegData?.waktu || 'N/A' }}</li>
         <li><strong>Durasi:</strong> {{ eegData?.durasiPerSecond }}/s ({{ eegData?.durasi }}/ms)</li>
-        <li><strong>probability:</strong> {{ eegData?.probability || 'N/A' }}</li>
+        <li><strong>Data Delta : {{ eegData?.classificationData[0] }}</strong></li>
+        <li><strong>Data Alpha : {{ eegData?.classificationData[1] }}</strong></li>
+        <li><strong>Data Theta : {{ eegData?.classificationData[2] }}</strong></li>
+        <li><strong>Data Beta : {{ eegData?.classificationData[3] }}</strong></li>
+        <li><strong>Data Gamma : {{ eegData?.classificationData[4] }}</strong></li>
       </ul>
     </mat-card-content>
   </mat-card>
@@ -23,7 +27,7 @@
       <mat-card-title>Hasil Klasifikasi</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <h2>{{ eegData?.classificationResult || 'Tidak ada hasil klasifikasi' }} ({{ eegData?.probability }})</h2>
+      <h2>{{ eegData?.classificationResult || 'Tidak ada hasil klasifikasi' }}</h2>
       <p>{{ eegData?.deskripsi }}</p>
       <p><span class="metode-klasifikasi">Metode Pembelajaran yang perlu diterapkan:</span> {{ eegData?.metodePembelajaran }}</p>
     </mat-card-content>

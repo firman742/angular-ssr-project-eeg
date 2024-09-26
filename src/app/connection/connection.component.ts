@@ -26,6 +26,7 @@ export class ConnectionComponent implements OnInit, OnDestroy {
   public chartOptions: AgCartesianChartOptions;
   eegChart: Array<{ time: number; TP9: number; AF7: number; AF8: number; TP10: number }> = [];
   eegData: Array<any> = [];
+  classificationData: Array<any> = [];
   updateIntervalId: any;
   isConnected: boolean = false;
   beforeFinished: boolean = false;
@@ -124,7 +125,11 @@ export class ConnectionComponent implements OnInit, OnDestroy {
             eegValue,
           });
 
+
+
           this.readinessLevel = this.classifyReadiness(eegValue); // Perform classification
+
+          this.classificationData = this.showClassifyNumber(eegValue);
 
           const RAW_TP9 = samples[0];
           const RAW_AF7 = samples[1];
@@ -168,8 +173,6 @@ export class ConnectionComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log('Data classification started...');
-        this.classificationProbability = this.calculateProbability(this.eegData); // Hitung probabilitas
-
         // Kirim data klasifikasi ke DataService
         this.dataClassificationService.setClassificationData({
           // data detail
@@ -179,11 +182,12 @@ export class ConnectionComponent implements OnInit, OnDestroy {
           durasi: this.eegData.length,
           // hasil klasifikasi
           classificationResult: this.readinessLevel,
-          probability: this.classificationProbability,
+          classificationData: this.classificationData,
           metodePembelajaran: this.recommendLearningMethod(), // Rekomendasi metode pembelajaran
           deskripsi: this.generateDescription(), // Tambahkan deskripsi singkat
           // chart
           eegData: this.eegChart,
+
         });
 
         // Redirect to result page
@@ -196,14 +200,6 @@ export class ConnectionComponent implements OnInit, OnDestroy {
     });
   }
 
-  calculateProbability(eegData: Array<any>): number {
-    // Contoh penghitungan probabilitas berdasarkan rasio Beta dan Alpha power
-    const betaPower = eegData.reduce((sum, entry) => sum + entry.eegValue.Beta_TP9, 0);
-    const alphaPower = eegData.reduce((sum, entry) => sum + entry.eegValue.Alpha_TP9, 0);
-
-    const probability = betaPower / (betaPower + alphaPower); // Rasio Beta terhadap total Beta+Alpha
-    return Math.min(1, Math.max(0, probability)); // Pastikan nilai probabilitas antara 0 dan 1
-  }
 
   generateDescription(): string {
     if (this.readinessLevel === 'KESIAPAN TINGGI') {
@@ -232,21 +228,32 @@ export class ConnectionComponent implements OnInit, OnDestroy {
   calculateFrequency(sample: number, band: string): number {
     // Lakukan perhitungan band EEG (Delta, Theta, Alpha, Beta, Gamma)
     switch (band) {
-      case 'Delta':
-        return sample * 0.1; // Contoh perhitungan band Delta
-      case 'Theta':
-        return sample * 0.2;
-      case 'Alpha':
-        return sample * 0.3;
-      case 'Beta':
-        return sample * 0.4;
-      case 'Gamma':
-        return sample * 0.5;
+      case 'Delta': // (0.5 - 4 HZ)
+        return sample * 0.5; // Contoh perhitungan band Delta
+      case 'Theta':// (4 - 8 HZ)
+        return sample * 4;
+      case 'Alpha':// (8 - 12 HZ)
+        return sample * 8;
+      case 'Beta':// (12 - 30 HZ)
+        return sample * 12;
+      case 'Gamma':// (>=30 HZ)
+        return sample * 30;
       default:
         return 0;
     }
   }
 
+  showClassifyNumber(eegValue: any): any {
+    const delta = eegValue.Delta_TP9 + eegValue.Delta_AF7 + eegValue.Delta_AF8 + eegValue.Delta_TP10;
+    const alpha = eegValue.Alpha_TP9 + eegValue.Alpha_AF7 + eegValue.Alpha_AF8 + eegValue.Alpha_TP10;
+    const theta = eegValue.Theta_TP9 + eegValue.Theta_AF7 + eegValue.Theta_AF8 + eegValue.Theta_TP10;
+    const beta = eegValue.Beta_TP9 + eegValue.Beta_AF7 + eegValue.Beta_AF8 + eegValue.Beta_TP10;
+    const gamma = eegValue.Gamma_TP9 + eegValue.Gamma_AF7 + eegValue.Gamma_AF8 + eegValue.Gamma_TP10;
+
+    const eegPower = [delta, alpha, theta, beta, gamma];
+
+    return eegPower;
+  }
   classifyReadiness(eegValue: any): string {
     const betaPower = eegValue.Beta_TP9 + eegValue.Beta_AF7 + eegValue.Beta_AF8 + eegValue.Beta_TP10;
     const alphaPower = eegValue.Alpha_TP9 + eegValue.Alpha_AF7 + eegValue.Alpha_AF8 + eegValue.Alpha_TP10;

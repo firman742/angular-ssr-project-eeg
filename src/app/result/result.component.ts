@@ -63,8 +63,9 @@ export class ResultComponent implements OnInit {
     const formattedTimestamp = formatDate(data.waktu, 'yyyy-MM-dd HH:mm:ss', 'en-US');
     data.waktu = formattedTimestamp;
     data.durasiPerSecond = data.durasi / milisecond;
-    console.log('Classification Result:', data.classificationResult);
+    // console.log('eeg Signal:', data.classificationResult);
     this.eegData = data; // Set data as needed for display
+    console.log(this.eegData);
   }
 
   updateChartData(): void {
