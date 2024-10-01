@@ -11,11 +11,15 @@
 header {
   margin-bottom: 20px;
   h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: bold;
   }
+  h4 {
+    font-size: 1rem;
+    font-weight: lighter;
+  }
   p {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     margin-top: 10px;
   }
 }
@@ -56,6 +60,7 @@ header {
   }
 }
 
+
 footer {
   margin-top: auto;
   font-size: 0.8rem;
@@ -65,7 +70,7 @@ footer {
 @media (max-width: 768px) {
   h1 {
     font-size: 1.5rem;
-    text-align: start;
+    text-align: center;
     padding: 10px;
   }
 }
