@@ -4,7 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { MuseClient } from 'muse-js';
+import { MuseClient } from 'muse-js'
+import FFT from "fft.js";
 import { AgCharts } from 'ag-charts-angular';
 import { AgCartesianChartOptions } from 'ag-charts-community';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
@@ -89,36 +90,39 @@ export class ConnectionComponent implements OnInit, OnDestroy {
         const samples = reading.samples;
         if (Array.isArray(samples) && samples.length >= 4) {
           const eegValue = {
-            Delta_TP9: this.calculateFrequency(samples[0], 'Delta'),
-            Delta_AF7: this.calculateFrequency(samples[1], 'Delta'),
-            Delta_AF8: this.calculateFrequency(samples[2], 'Delta'),
-            Delta_TP10: this.calculateFrequency(samples[3], 'Delta'),
+            Delta_TP9: this.calculateFrequency([samples[0]], 'Delta'),
+            Delta_AF7: this.calculateFrequency([samples[1]], 'Delta'),
+            Delta_AF8: this.calculateFrequency([samples[2]], 'Delta'),
+            Delta_TP10: this.calculateFrequency([samples[3]], 'Delta'),
 
-            Theta_TP9: this.calculateFrequency(samples[0], 'Theta'),
-            Theta_AF7: this.calculateFrequency(samples[1], 'Theta'),
-            Theta_AF8: this.calculateFrequency(samples[2], 'Theta'),
-            Theta_TP10: this.calculateFrequency(samples[3], 'Theta'),
+            Theta_TP9: this.calculateFrequency([samples[0]], 'Theta'),
+            Theta_AF7: this.calculateFrequency([samples[1]], 'Theta'),
+            Theta_AF8: this.calculateFrequency([samples[2]], 'Theta'),
+            Theta_TP10: this.calculateFrequency([samples[3]], 'Theta'),
 
-            Alpha_TP9: this.calculateFrequency(samples[0], 'Alpha'),
-            Alpha_AF7: this.calculateFrequency(samples[1], 'Alpha'),
-            Alpha_AF8: this.calculateFrequency(samples[2], 'Alpha'),
-            Alpha_TP10: this.calculateFrequency(samples[3], 'Alpha'),
+            Alpha_TP9: this.calculateFrequency([samples[0]], 'Alpha'),
+            Alpha_AF7: this.calculateFrequency([samples[1]], 'Alpha'),
+            Alpha_AF8: this.calculateFrequency([samples[2]], 'Alpha'),
+            Alpha_TP10: this.calculateFrequency([samples[3]], 'Alpha'),
 
-            Gamma_TP9: this.calculateFrequency(samples[0], 'Gamma'),
-            Gamma_AF7: this.calculateFrequency(samples[1], 'Gamma'),
-            Gamma_AF8: this.calculateFrequency(samples[2], 'Gamma'),
-            Gamma_TP10: this.calculateFrequency(samples[3], 'Gamma'),
+            Gamma_TP9: this.calculateFrequency([samples[0]], 'Gamma'),
+            Gamma_AF7: this.calculateFrequency([samples[1]], 'Gamma'),
+            Gamma_AF8: this.calculateFrequency([samples[2]], 'Gamma'),
+            Gamma_TP10: this.calculateFrequency([samples[3]], 'Gamma'),
 
-            Beta_TP9: this.calculateFrequency(samples[0], 'Beta'),
-            Beta_AF7: this.calculateFrequency(samples[1], 'Beta'),
-            Beta_AF8: this.calculateFrequency(samples[2], 'Beta'),
-            Beta_TP10: this.calculateFrequency(samples[3], 'Beta'),
+            Beta_TP9: this.calculateFrequency([samples[0]], 'Beta'),
+            Beta_AF7: this.calculateFrequency([samples[1]], 'Beta'),
+            Beta_AF8: this.calculateFrequency([samples[2]], 'Beta'),
+            Beta_TP10: this.calculateFrequency([samples[3]], 'Beta'),
 
             RAW_TP9: samples[0],
             RAW_AF7: samples[1],
             RAW_AF8: samples[2],
             RAW_TP10: samples[3],
           };
+
+          console.log(eegValue);
+
 
           this.eegData.push({
             timestamp: Date.now(),
@@ -225,22 +229,52 @@ export class ConnectionComponent implements OnInit, OnDestroy {
     }
   }
 
-  calculateFrequency(sample: number, band: string): number {
-    // Lakukan perhitungan band EEG (Delta, Theta, Alpha, Beta, Gamma)
+  // Fungsi untuk menghitung spektrum frekuensi menggunakan FFT
+  calculateFrequency(samples: number[], band: string): number {
+    // Inisialisasi FFT, misal menggunakan 128 poin (tergantung jumlah sampel)
+    const fftSize = 256;
+    const fft = new FFT(fftSize);
+
+
+    // Mengambil data dalam bentuk kompleks
+    const re = samples.slice(0, fftSize); // Ambil sample yang akan di FFT
+    const im = new Array(fftSize).fill(0); // Imaginernya diinisialisasi dengan 0
+
+    // FFT transformasi
+    fft.transform(re, im);
+    console.log([fft, re, im]);
+
+    // Hitung magnitude untuk frekuensi
+    const magnitude = re.map((val, i) => Math.sqrt(val * val + im[i] * im[i]));
+
+
+    // Tentukan range frekuensi berdasarkan band yang diminta
     switch (band) {
-      case 'Delta': // (0.5 - 4 HZ)
-        return sample * 0.5; // Contoh perhitungan band Delta
-      case 'Theta':// (4 - 8 HZ)
-        return sample * 4;
-      case 'Alpha':// (8 - 12 HZ)
-        return sample * 8;
-      case 'Beta':// (12 - 30 HZ)
-        return sample * 12;
-      case 'Gamma':// (>=30 HZ)
-        return sample * 30;
+      case 'Delta':
+        return this.calculatePowerInBand(magnitude, 0.5, 4);
+      case 'Theta':
+        return this.calculatePowerInBand(magnitude, 4, 8);
+      case 'Alpha':
+        return this.calculatePowerInBand(magnitude, 8, 12);
+      case 'Beta':
+        return this.calculatePowerInBand(magnitude, 12, 30);
+      case 'Gamma':
+        return this.calculatePowerInBand(magnitude, 30, 100);
       default:
         return 0;
     }
+  }
+
+  // Fungsi untuk menghitung power dalam range frekuensi tertentu
+  calculatePowerInBand(magnitude: number[], minFreq: number, maxFreq: number): number {
+    const sampleRate = 256; // Asumsikan 256 Hz sample rate
+    const nyquist = sampleRate / 2;
+    const minIndex = Math.floor(minFreq / nyquist * magnitude.length);
+    const maxIndex = Math.floor(maxFreq / nyquist * magnitude.length);
+
+    // Hitung rata-rata power dalam band
+    const power = magnitude.slice(minIndex, maxIndex).reduce((acc, val) => acc + val, 0);
+    return power / (maxIndex - minIndex);
   }
 
   showClassifyNumber(eegValue: any): any {

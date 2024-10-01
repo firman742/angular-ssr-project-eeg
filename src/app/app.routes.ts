@@ -6,6 +6,7 @@ import { ResultComponent } from './result/result.component';
 import { AppComponent } from './app.component';
 import { CoverComponent } from './cover/cover.component';
 import { AuthGuard } from './auth.guard';
+import { TestingComponent } from './testing/testing.component';
 
 const routes: Routes = [
   { path: '', component: CoverComponent }, // Halaman Cover
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'connection', component: ConnectionComponent }, // Halaman koneksi
   { path: 'result', component: ResultComponent, canActivate: [AuthGuard] }, // Halaman Hasil
   { path: 'login', component: LoginComponent }, // Halaman Login
+  { path: 'testing', component: TestingComponent }, // Halaman Login
   { path: '**', redirectTo: '/login' }, // Redirect any unknown paths to login
 ];
 
