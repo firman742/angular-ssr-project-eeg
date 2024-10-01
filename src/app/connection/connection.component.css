@@ -25,6 +25,7 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer; /* Add pointer cursor for better UX */
+  font-size: 1rem; /* Base font size */
 }
 
 button:hover {
@@ -40,4 +41,25 @@ button:hover {
 ag-charts {
   width: 100%;
   max-width: 800px; /* Set max-width to ensure it doesn't stretch too wide */
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 600px) {
+  button {
+    padding: 8px 16px; /* Smaller padding */
+    font-size: 0.9rem; /* Slightly smaller font size */
+    margin-right: 5px; /* Reduce margin between buttons */
+  }
+
+  h1 {
+    font-size: 1.5rem; /* Smaller title size */
+  }
+
+  .chart-container {
+    padding: 0 10px; /* Add padding to the chart container */
+  }
+
+  ag-charts {
+    height: 300px; /* Adjust chart height for mobile */
+  }
 }
